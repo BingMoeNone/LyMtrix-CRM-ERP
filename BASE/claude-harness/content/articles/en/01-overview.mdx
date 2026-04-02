@@ -1,0 +1,45 @@
+---
+title: "Architecture Overview"
+description: "A high-level look at how Claude Code is structured — from CLI entry point to tool execution."
+order: 1
+---
+
+## What is Claude Code?
+
+Claude Code is Anthropic's official CLI tool for interacting with Claude directly from the terminal. It handles everything from editing files and running commands to managing git workflows — with ~1,900 TypeScript files and 512,000+ lines of code.
+
+## Entry Point
+
+Everything starts in `main.tsx`, which uses Commander.js to parse CLI arguments and React/Ink to render the terminal UI. At startup, it parallelizes several prefetch operations:
+
+- MDM settings read
+- Keychain prefetch
+- GrowthBook (feature flags) initialization
+
+## Core Loop
+
+The heart of the system is `QueryEngine.ts` (~46K lines). It handles:
+
+1. Sending messages to the Anthropic API
+2. Streaming responses back
+3. Executing tool calls in a loop
+4. Managing token counting and cost tracking
+
+## Tool System
+
+Every capability Claude Code has — reading files, running shell commands, searching code — is implemented as a **Tool** in `src/tools/`. Each tool defines:
+
+- An input schema (what parameters it accepts)
+- A permission model (what the user needs to approve)
+- Execution logic
+
+See the [Code Browser](/code/tools) to explore all ~40 tool implementations.
+
+## What's Next
+
+In upcoming articles, we'll dive deep into individual modules:
+
+- The Tool system and how permissions work
+- The Command system and slash commands
+- The Bridge system for IDE integration
+- The Agent/Coordinator system for multi-agent workflows
