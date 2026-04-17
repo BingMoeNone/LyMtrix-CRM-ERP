@@ -285,4 +285,4 @@ OpenClaw 的 MIT 许可证对商业化非常友好：
 ## 相关文档
 
 - [02-data-security.md](02-data-security.md) — 数据安全与合规体系
-- [../technical/02-openclaw-development.md](../technical/02-openclaw-development.md) — OpenClaw 二次开发方案
+- [../technical/02-openclaw-development.md](../technical/02-openclaw-development.md) — OpenClaw 内核定制开发方案

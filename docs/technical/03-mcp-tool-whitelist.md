@@ -388,7 +388,67 @@ MCP 工具白名单体系是 AI 与业务逻辑隔离的关键机制。通过：
 3. **白名单管控**：AI只能调用已注册工具
 4. **分级权限**：读写分离，确认机制
 
-这套机制可以过滤大部分因 AI 幻觉导致的无效请求，是四重防护体系的重要一环。
+这套机制可以过滤大部分因 AI 幻觉导致的无效请求，是六重防护体系的重要一环。
+
+---
+
+## 15. 与 Hook 系统联动
+
+### 15.1 联动架构
+
+MCP 白名单与 Hook 系统形成**分层防护**：
+
+```
+Stop Hooks（危险模式检测）
+    │
+    ▼
+MCP 白名单校验（工具 + 参数）
+    │
+    ▼
+Tool Hooks（参数深度验证）
+    │
+    ▼
+业务引擎执行
+```
+
+### 15.2 Tool Hooks 增强
+
+MCP 白名单只验证**工具是否存在**和**参数格式**，Tool Hooks 提供**深度验证**：
+
+| 验证层 | 验证内容 | 示例 |
+|--------|----------|------|
+| MCP 白名单 | 工具是否存在、参数类型 | `customer.create` 存在，参数是对象 |
+| Tool Hooks | 参数业务含义 | `phone` 符合正则、`amount` 在范围内 |
+
+### 15.3 实现示例
+
+```typescript
+// ToolParameterValidationHook
+const toolParameterValidationHook = {
+  name: 'tool_parameter_validation',
+  type: 'pre_tool',
+  async execute(context: HookContext): Promise<HookResult> {
+    const { toolCall } = context
+
+    // MCP 已验证：工具存在、参数类型正确
+    // Tool Hook 验证：参数业务含义
+
+    const rules = getRulesForTool(toolCall.toolName)
+
+    // 深度验证
+    for (const [field, rule] of Object.entries(rules.validation)) {
+      if (!rule.validate(toolCall.parameters[field])) {
+        return {
+          status: 'block',
+          message: `参数 ${field} 验证失败: ${rule.message}`
+        }
+      }
+    }
+
+    return { status: 'allow' }
+  }
+}
+```
 
 ---
 
@@ -396,4 +456,5 @@ MCP 工具白名单体系是 AI 与业务逻辑隔离的关键机制。通过：
 
 - [01-multi-agent-design.md](01-multi-agent-design.md) — Multi-Agent 协同决策系统设计
 - [04-business-engine.md](04-business-engine.md) — 统一业务引擎设计
-- [05-four-layer-safety.md](05-four-layer-safety.md) — 四重防护机制详解
+- [05-four-layer-safety.md](05-four-layer-safety.md) — 六重防护机制详解
+- [12-hook-system-design.md](12-hook-system-design.md) — Hook 系统详细设计

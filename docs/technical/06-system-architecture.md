@@ -120,8 +120,8 @@
 | **前端框架** | Vue 3 / React | 生态成熟，社区活跃 |
 | **移动端** | uni-app | 一套代码多端运行 |
 | **API网关** | Nginx / Spring Cloud Gateway | 成熟稳定 |
-| **AI模型** | 豆包Pro-32k / 通义千问4 | 国内合规，可商用 |
-| **Agent框架** | OpenClaw | MIT协议，功能匹配 |
+| **AI模型** | MiniMax M2.7（主Agent）/ MiniMax M2.5（子Agent） | 强大推理能力，成本优化 |
+| **Agent内核** | OpenClaw（内核定制） | MIT协议，仅使用其调度能力，核心逻辑自主开发 |
 | **工具协议** | MCP | 标准化，社区支持 |
 | **后端框架** | FastAPI / Spring Boot | 性能与开发效率平衡 |
 | **ORM** | MyBatis-Plus | 轻量、灵活 |
@@ -149,14 +149,16 @@
 
 ## 4. 关键设计决策
 
-### 4.1 为什么选择 OpenClaw
+### 4.1 为什么选择 OpenClaw（作为内核）
 
 | 考量 | 分析 |
 |------|------|
 | **协议** | MIT，最宽松的开源协议，适合商业化 |
-| **功能** | 原生支持多Agent、工具调用、Human-in-the-Loop |
-| **复杂度** | 无需从零开发，减少工作量 |
-| **风险** | 框架依赖，学习曲线，社区支持 |
+| **定位** | 作为内核使用，仅依赖其Agent调度、Session管理能力 |
+| **核心逻辑** | 投票决策、风险评估、确认工作流、审计日志完全自主开发 |
+| **可替换性** | 如OpenClaw不满足需求，可替换为其他方案 |
+
+**重要说明**：本项目以OpenClaw为内核进行深度定制开发，核心业务逻辑（分层投票器、风险评估引擎、白名单管理器、人工确认工作流、业务规则引擎、审计日志系统）完全自主实现，不依赖OpenClaw的业务逻辑能力。
 
 ### 4.2 为什么选择 MCP
 
@@ -333,4 +335,5 @@
 - [01-multi-agent-design.md](01-multi-agent-design.md) — Multi-Agent 协同决策系统设计
 - [02-openclaw-development.md](02-openclaw-development.md) — OpenClaw 二次开发方案
 - [04-business-engine.md](04-business-engine.md) — 统一业务引擎设计
-- [05-four-layer-safety.md](05-four-layer-safety.md) — 四重防护机制详解
+- [05-four-layer-safety.md](05-four-layer-safety.md) — 六重防护机制详解
+- [12-hook-system-design.md](12-hook-system-design.md) — Hook 系统详细设计

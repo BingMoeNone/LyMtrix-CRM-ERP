@@ -569,5 +569,6 @@
 ## 相关文档
 
 - [01-multi-agent-design.md](01-multi-agent-design.md) — Multi-Agent 协同决策系统设计
-- [05-four-layer-safety.md](05-four-layer-safety.md) — 四重防护机制详解
+- [05-four-layer-safety.md](05-four-layer-safety.md) — 六重防护机制详解
 - [06-system-architecture.md](06-system-architecture.md) — 整体技术架构设计
+- [12-hook-system-design.md](12-hook-system-design.md) — Hook 系统详细设计

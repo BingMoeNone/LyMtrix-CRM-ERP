@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:platform.minimaxi.com)",
+      "WebFetch(domain:www.minimaxi.com)"
+    ]
+  }
+}
